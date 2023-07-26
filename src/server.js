@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const { Sequelize, DataTypes } = require("sequelize");
 const multer = require("multer");
 require('dotenv').config()
-console.log(process.env)
+
 const path = require("path");
 
 const storage = multer.diskStorage({
@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const sequelize = new Sequelize(process.env.DATABASE, process.env.ROOT, process.env.PASSWORD, {
+const sequelize = new Sequelize(process.env.DATABASE, process.env.DB_USERNAME, process.env.PASSWORD, {
   host: process.env.HOST,
   dialect: "mysql",
 });
