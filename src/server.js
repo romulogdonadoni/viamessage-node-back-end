@@ -2,7 +2,8 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const { Sequelize, DataTypes } = require("sequelize");
 const multer = require("multer");
-
+require('dotenv').config()
+console.log(process.env)
 const path = require("path");
 
 const storage = multer.diskStorage({
@@ -17,8 +18,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const sequelize = new Sequelize("mydb", "root", "RGD11052001@123", {
-  host: "localhost",
+const sequelize = new Sequelize(process.env.DATABASE, process.env.ROOT, process.env.PASSWORD, {
+  host: process.env.HOST,
   dialect: "mysql",
 });
 
@@ -259,6 +260,6 @@ app.get("/alluserposts/:id", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Servidor Express iniciado na porta 3000.");
 });
