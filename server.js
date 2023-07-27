@@ -39,8 +39,8 @@ const User = sequelize.define(
   "User",
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
     tagname: DataTypes.STRING,
@@ -60,8 +60,8 @@ const Post = sequelize.define(
   "Post",
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
     img: DataTypes.STRING,
@@ -78,8 +78,8 @@ const Comment = sequelize.define(
   "Comment",
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
     comment: DataTypes.STRING,
