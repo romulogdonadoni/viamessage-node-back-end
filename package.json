@@ -17,6 +17,8 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.5.0",
     "react-router-dom": "^6.14.1",
-    "sequelize": "^6.32.1"
+    "sequelize": "^6.32.1",
+    "uuid": "^9.0.0",
+    "uuidv4": "^6.2.13"
   }
 }

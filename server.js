@@ -2,7 +2,8 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const { Sequelize, DataTypes } = require("sequelize");
 const multer = require("multer");
-require('dotenv').config()
+require("dotenv").config();
+const { v4: uuidv4 } = require("uuid");
 
 const path = require("path");
 
@@ -40,7 +41,6 @@ const User = sequelize.define(
   {
     id: {
       type: Sequelize.UUID,
-      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
     tagname: DataTypes.STRING,
@@ -55,18 +55,16 @@ const User = sequelize.define(
     tableName: "user",
   }
 );
-
 const Post = sequelize.define(
   "Post",
   {
     id: {
       type: Sequelize.UUID,
-      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
     img: DataTypes.STRING,
-    description: DataTypes.STRING,
-    user_id: DataTypes.INTEGER,
+    description: Sequelize.UUID,
+    user_id: Sequelize.UUID,
   },
   {
     freezeTableName: true,
@@ -79,12 +77,10 @@ const Comment = sequelize.define(
   {
     id: {
       type: Sequelize.UUID,
-      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
     comment: DataTypes.STRING,
-    post_id: DataTypes.INTEGER,
-    owner_id: DataTypes.INTEGER,
+    post_id: Sequelize.UUID,
   },
   {
     freezeTableName: true,
@@ -99,9 +95,9 @@ User.hasMany(Post, {
 Post.hasMany(Comment, {
   foreignKey: "post_id",
 });
-Comment.belongsTo(User, {
+/* Comment.belongsTo(User, {
   foreignKey: "owner_id",
-});
+}); */
 function authToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -144,12 +140,15 @@ app.get("/auth/register", async (req, res) => {
 app.post("/auth/register", async (req, res) => {
   console.log(req.body);
   try {
-    const { username, password } = req.body;
+    const { username, tagname, email, password } = req.body;
     if (password.length < 8) {
       return;
     }
     const newUser = await User.create({
+      id: uuidv4(),
+      tagname,
       username,
+      email,
       password,
     });
 
@@ -163,8 +162,8 @@ app.post("/auth/register", async (req, res) => {
 app.post("/auth/login", async (req, res) => {
   console.log(req.body);
   try {
-    const { username, password } = req.body;
-    const newUser = await User.findOne({ where: { username: username } });
+    const { email, password } = req.body;
+    const newUser = await User.findOne({ where: { email: email } });
 
     if (password === newUser.password) {
       const token = jwt.sign({ id: newUser.id }, "123");
@@ -183,9 +182,9 @@ app.post("/create/comment/:postid", authToken, async (req, res) => {
   const { id } = jwt.decode(token);
   try {
     const newComment = await Comment.create({
+      id: uuidv4(),
       comment,
       post_id: postid,
-      owner_id: id,
     });
     res.status(201).json(newComment);
   } catch (error) {
@@ -200,10 +199,10 @@ app.get("/post/comment/:id", async (req, res) => {
   try {
     const comment = await Comment.findAll({
       where: { post_id: id },
-      include: {
+      /* include: {
         model: User,
         attributes: { exclude: ["password", "email"] },
-      },
+      }, */
     });
 
     res.send(JSON.stringify({ comment }));
@@ -222,6 +221,7 @@ app.post("/create/post", upload.single("img"), authToken, async (req, res) => {
 
   try {
     const newPost = await Post.create({
+      id: uuidv4(),
       img: req.file.filename.split(".")[0],
       description,
       user_id: id,
@@ -233,9 +233,9 @@ app.post("/create/post", upload.single("img"), authToken, async (req, res) => {
   }
 });
 
-app.get("/alluserposts/:id", async (req, res) => {
-  const id = req.params["id"];
-  console.log(id);
+app.get("/get/post", async (req, res) => {
+  const token = req.headers["authorization"].split(" ")[1];
+  const { id } = jwt.decode(token);
 
   try {
     const user = await User.findByPk(id, {
@@ -243,15 +243,7 @@ app.get("/alluserposts/:id", async (req, res) => {
       include: [
         {
           model: Post,
-          attributes: { exclude: ["user_id"] },
-          include: {
-            model: Comment,
-            attributes: { exclude: ["post_id", "owner_id"] },
-            include: {
-              model: User,
-              attributes: { exclude: ["password"] },
-            },
-          },
+          attributes: { exclude: ["user_id"] }
         },
       ],
     });
