@@ -40,6 +40,7 @@ const User = sequelize.define(
   {
     id: {
       type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
     },
     tagname: DataTypes.STRING,
@@ -60,6 +61,7 @@ const Post = sequelize.define(
   {
     id: {
       type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
     },
     img: DataTypes.STRING,
@@ -77,6 +79,7 @@ const Comment = sequelize.define(
   {
     id: {
       type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
     },
     comment: DataTypes.STRING,
