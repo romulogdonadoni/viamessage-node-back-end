@@ -4,8 +4,16 @@ const { Sequelize, DataTypes } = require("sequelize");
 const multer = require("multer");
 require("dotenv").config();
 const { v4: uuidv4 } = require("uuid");
-
+const cors = require("cors");
 const path = require("path");
+
+const app = express();
+app.use(express.json());
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  app.use(cors());
+  next();
+});
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -32,9 +40,6 @@ sequelize
   .catch((err) => {
     console.error("Erro ao sincronizar o modelo com o banco de dados: " + err);
   });
-
-const app = express();
-app.use(express.json());
 
 const User = sequelize.define(
   "User",
@@ -92,12 +97,15 @@ const Comment = sequelize.define(
 User.hasMany(Post, {
   foreignKey: "user_id",
 });
+
 Post.hasMany(Comment, {
   foreignKey: "post_id",
 });
+
 /* Comment.belongsTo(User, {
   foreignKey: "owner_id",
 }); */
+
 function authToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -192,6 +200,7 @@ app.post("/create/comment/:postid", authToken, async (req, res) => {
     res.sendStatus(500);
   }
 });
+
 app.get("/post/comment/:id", async (req, res) => {
   const id = req.params["id"];
   console.log(id);
@@ -218,7 +227,6 @@ app.post("/create/post", upload.single("img"), authToken, async (req, res) => {
   console.log(req.file.filename.split(".")[0]);
   const token = req.headers["authorization"].split(" ")[1];
   const { id } = jwt.decode(token);
-
   try {
     const newPost = await Post.create({
       id: uuidv4(),
@@ -243,7 +251,7 @@ app.get("/get/post", async (req, res) => {
       include: [
         {
           model: Post,
-          attributes: { exclude: ["user_id"] }
+          attributes: { exclude: ["user_id"] },
         },
       ],
     });
