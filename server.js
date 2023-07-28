@@ -8,7 +8,7 @@ const ImageKit = require("imagekit");
 const fs = require("fs");
 
 const cors = require("cors");
-const path = require("path");
+//const path = require("path");
 const app = express();
 
 app.use(express.json());
@@ -24,8 +24,14 @@ const imagekit = new ImageKit({
   urlEndpoint: "https://ik.imagekit.io/e82dsgvbi/",
 });
 
+const multerMemoryStorage = multer.memoryStorage();
 
-const upload = multer({ storage: multer.memoryStorage() });
+const multerConfig = {
+  storage: multerMemoryStorage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // Limite de tamanho do arquivo (10MB)
+  },
+};
 
 const sequelize = new Sequelize(process.env.DATABASE, process.env.DB_USERNAME, process.env.PASSWORD, {
   host: process.env.HOST,
@@ -222,14 +228,12 @@ app.get("/post/comment/:id", async (req, res) => {
   }
 });
 
-app.post("/create/post", upload.single("image"), authToken, async (req, res) => {
-  console.log(req.file.path);
+app.post("/create/post", multer(multerConfig).single("image"), authToken, async (req, res) => {
+  console.log(req.file.buffer);
   const token = req.headers["authorization"].split(" ")[1];
   const { id } = jwt.decode(token);
   const description = req.body.description;
-  const pathFile = req.file.path;
-  const bitmap = fs.readFileSync(pathFile);
-  const base64image = bitmap.toString("base64");
+  const base64image = req.file.buffer.toString("base64");
   var imageURL;
   try {
     imageURL = await imagekit
