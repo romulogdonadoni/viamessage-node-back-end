@@ -24,17 +24,8 @@ const imagekit = new ImageKit({
   urlEndpoint: "https://ik.imagekit.io/e82dsgvbi/",
 });
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "C:/Users/Romulo/Desktop/tmp");
-  },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    cb(null, file.fieldname + "-" + Date.now() + ext);
-  },
-});
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 const sequelize = new Sequelize(process.env.DATABASE, process.env.DB_USERNAME, process.env.PASSWORD, {
   host: process.env.HOST,
