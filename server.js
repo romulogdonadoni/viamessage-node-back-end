@@ -4,15 +4,24 @@ const { Sequelize, DataTypes } = require("sequelize");
 const multer = require("multer");
 require("dotenv").config();
 const { v4: uuidv4 } = require("uuid");
+const ImageKit = require("imagekit");
+const fs = require("fs");
+
 const cors = require("cors");
 const path = require("path");
-
 const app = express();
+
 app.use(express.json());
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   app.use(cors());
   next();
+});
+
+const imagekit = new ImageKit({
+  publicKey: "public_saF/Owtr0cpKt5lyvCgBSaI32qQ=",
+  privateKey: "private_h9SASm5V7LcxbmxF03sG7eNHzlg=",
+  urlEndpoint: "https://ik.imagekit.io/e82dsgvbi/",
 });
 
 const storage = multer.diskStorage({
@@ -121,17 +130,18 @@ function authToken(req, res, next) {
   }
 }
 
-const imagesDirectory = "C:/Users/Romulo/Desktop/tmp";
+app.get("/get/post/image/:id", async (req, res) => {
+  const { id } = req.params;
 
-app.get("/getpostimage/:name", async (req, res) => {
-  const { name } = req.params;
-  const imagePath = path.join(imagesDirectory, `${name}`);
-  res.sendFile(imagePath, (err) => {
-    if (err) {
-      console.log(err);
-      res.status(404).send(err + "Imagem não encontrada.");
-    }
-  });
+  try {
+    const imageFile = await imagekit.getFileDetails(id);
+    console.log(imageFile);
+    res.send(JSON.stringify({ url: imageFile.url }));
+  } catch {
+    (err) => {
+      res.send(err);
+    };
+  }
 });
 
 app.get("/auth/register", async (req, res) => {
@@ -221,22 +231,42 @@ app.get("/post/comment/:id", async (req, res) => {
   }
 });
 
-app.post("/create/post", upload.single("img"), authToken, async (req, res) => {
-  const { description } = req.body;
-  console.log(req.body);
-  console.log(req.file.filename.split(".")[0]);
+app.post("/create/post", upload.single("image"), authToken, async (req, res) => {
+  console.log(req.file.path);
   const token = req.headers["authorization"].split(" ")[1];
   const { id } = jwt.decode(token);
+  const description = req.body.description;
+  const pathFile = req.file.path;
+  const bitmap = fs.readFileSync(pathFile);
+  const base64image = bitmap.toString("base64");
+  var imageURL;
+  try {
+    imageURL = await imagekit
+      .upload({
+        file: base64image,
+        fileName: "my_file_name.jpg",
+      })
+      .then((response) => {
+        console.log(response);
+        return response.url;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    console.error("Erro fazer upload da imagem: " + error);
+    res.sendStatus(500);
+  }
   try {
     const newPost = await Post.create({
       id: uuidv4(),
-      img: req.file.filename.split(".")[0],
+      img: imageURL,
       description,
       user_id: id,
     });
     res.status(201).json(newPost);
   } catch (error) {
-    console.error("Erro ao criar post: " + error);
+    console.error("Erro ao criar comentário: " + error);
     res.sendStatus(500);
   }
 });

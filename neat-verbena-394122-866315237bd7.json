@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "neat-verbena-394122",
+  "private_key_id": "866315237bd7b6c420907d4b43adc32db3654058",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDSlTp8S0eCmRrS\nHOo9uHKcwjylELQCtMzmV4Kc4f9B/l+dR3oRyz8a/INByBgRZu8oh9cV6jN983Jc\nWPiuRGOks1XOrfXjxvfwUHktA3ec0wtw841uxXafjYlp8xuMq1edd25/GtPw4pGU\nxLHT+HR6hXKU9OLWtKRRZYhPxAAjS9Dp8WAetNHVB+UaKFoZ2Oo94Hw3UTpUGlM+\ntGGX+hEOj/QfWI42FsbADXHIizTu0W0nkHEKSXwgBk5YeEOH8G1vxcyGHB1TQhS4\n10XYf6mhi4ceORiK7gHVr5oz6DF9WeVZdeAz/pUgXdBRQz8RcUndhC8Fchvcl80y\n/PGqY9NJAgMBAAECggEAKzvGASS3bsGeNwsGsFtA9JwQNVdjjbau5o+K2kivzk26\nNaEqF6MhtpmnHQdGobP/X9Pbvb0Si0ZC8WC21Zhm2LaU5FTkybncx3LOHga7NPBD\nRhJKtDZIL2OwlZb6zfuThlmxztikMK1jdCaZ18oHp+vj5V8Nf0UhAzEUNkQoPxZ+\n93c9EI6K5WTRLwfPLnztQjOS2jYjRBee05X4OoCzt51pUIX2hDk6PmUAMkkd+X+p\nrvqr4ZatPnz68N9igu6iM/xPcv9oOkUj7QMjvdZS3F/6EfnUXR82dzPELfumoH1+\naiih0FlK0adVs9RC5P3K2mbPPhiSapGP7zGHxJlq8QKBgQD+Qz3vzr3iE6BkrkUr\nO4yzYXOMZ4XwoOV8E8TUNBMPyMeZc6uah8jw0mJJOkfFdLRmzVn41xoylzdBZL4K\nRahTTvk+jCLW6J8Bn7rZrzsWtvfSVEyESaovCQ6BvSwTmI0jd2VDRZBchauszlqj\ngupQb0op5KlDRapupanINU6PLQKBgQDUBZTkKvwaZRMgrv5eJKybVkExr2Rw8nPI\nBM+Nr4iXhJYWezXJ89TRp5b6rXrQ+brwueiin7NaQWYETEBB2lGX+dK/uX78+xjr\nmK6DAygim/tpGksiP/Du7nQqwMAtQ66fEkbgdNS2inuB109zVIWRwIqL5MxC1Ij6\nAJPtsWmGDQKBgGRx5+vufnDrU/eyKL0Vf1X175HN68nNphrILH+wOr+Hj+J9IZOg\nhK8uTYmkLmpA2muqQBrfzwehWUDKLZEdR4vxrOEat0CzEO2xTj1kzjEBAxHiH4A7\nIbIHH+X894aeQ1N5fVWAC7GhVNqlgoUJ2MsBzAiUvpFG2jdv1oyzEl/ZAoGAI0De\nVeXzzyu5N3kBYIP2k0mPQ4SnTcRyjfKG1Ec4jgEEt6467l51p3qXNw07W536gGZZ\nERk+yCYRoWtQT+LOKFfou+pK/COALERR2AThWofXEM3HamV5WTEa7bTo/12+nkJ6\nuH2UlNmH2boEQuft4aNDJimf8QjH0dHgxuf15M0CgYBVLJymDTi5D8C93j41TMIH\nAIaKdgk8Y+NFWUZ0lqsa3UJid9O1cwF7+/eM0ljWcP1BoFsEh3sBt+eIuDsKetKn\nRvv9tiwVkow9ACwvcAjIDBhJ2Ey8Y3H7lURvxn5XB9TVZk6rjww8+LI7Lg6z5qfU\nRq+dvQMZgVrgBXp4j3VWWg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "romulo-891@neat-verbena-394122.iam.gserviceaccount.com",
+  "client_id": "114436558391370738613",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/romulo-891%40neat-verbena-394122.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
