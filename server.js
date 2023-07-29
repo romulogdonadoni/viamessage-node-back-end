@@ -270,23 +270,14 @@ app.post("/create/post", multer(multerConfig).single("image"), authToken, async 
 app.get("/get/post/:privacy", async (req, res) => {
   const token = req.headers["authorization"].split(" ")[1];
   const privacy = req.params["privacy"];
-  console.log(privacy)
   const { id } = jwt.decode(token);
 
   try {
-    const user = await User.findByPk(id, {
-      
-      attributes: { exclude: ["password"] },
-      include: [
-        {
-          where: { privacy: privacy },
-          model: Post,
-          attributes: { exclude: ["user_id"] },
-        },
-      ],
+    const posts = await Post.findAll({
+      where: { privacy: privacy },
     });
 
-    res.send(JSON.stringify({ user }));
+    res.send(JSON.stringify({ posts }));
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
