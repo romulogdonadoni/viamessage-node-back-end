@@ -75,6 +75,7 @@ const Post = sequelize.define(
     },
     img: DataTypes.STRING,
     description: Sequelize.UUID,
+    privacy: Sequelize.STRING,
     user_id: Sequelize.UUID,
   },
   {
@@ -229,10 +230,9 @@ app.get("/post/comment/:id", async (req, res) => {
 });
 
 app.post("/create/post", multer(multerConfig).single("image"), authToken, async (req, res) => {
-  console.log(req.file.buffer);
   const token = req.headers["authorization"].split(" ")[1];
   const { id } = jwt.decode(token);
-  const description = req.body.description;
+  const { description, privacy } = req.body;
   const base64image = req.file.buffer.toString("base64");
   var imageURL;
   try {
@@ -257,24 +257,29 @@ app.post("/create/post", multer(multerConfig).single("image"), authToken, async 
       id: uuidv4(),
       img: imageURL,
       description,
+      privacy: privacy,
       user_id: id,
     });
     res.status(201).json(newPost);
   } catch (error) {
-    console.error("Erro ao criar comentário: " + error);
+    console.error("Erro ao criar post: " + error);
     res.sendStatus(500);
   }
 });
 
-app.get("/get/post", async (req, res) => {
+app.get("/get/post/:privacy", async (req, res) => {
   const token = req.headers["authorization"].split(" ")[1];
+  const privacy = req.params["privacy"];
+  console.log(privacy)
   const { id } = jwt.decode(token);
 
   try {
     const user = await User.findByPk(id, {
+      
       attributes: { exclude: ["password"] },
       include: [
         {
+          where: { privacy: privacy },
           model: Post,
           attributes: { exclude: ["user_id"] },
         },
