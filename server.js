@@ -142,11 +142,12 @@ app.get("/get/post/image/:id", async (req, res) => {
   }
 });
 
-app.get("/auth/register", async (req, res) => {
+app.get("/get/user/:id", async (req, res) => {
+  const id = req.params["id"];
   try {
-    const users = await User.findAll();
+    const users = await User.findByPk(id, { attributes: { exclude: ["password"] } });
 
-    res.send("Usuários: " + JSON.stringify(users));
+    res.send(JSON.stringify({users}));
   } catch (error) {
     console.error("Erro ao buscar os usuários: " + error);
     res.sendStatus(500);
