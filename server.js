@@ -104,7 +104,7 @@ const Comment = sequelize.define(
 User.hasMany(Post, {
   foreignKey: "user_id",
 });
-
+Post.belongsTo(User, { foreignKey: "user_id" });
 Post.hasMany(Comment, {
   foreignKey: "post_id",
 });
@@ -142,10 +142,10 @@ app.get("/get/post/image/:id", async (req, res) => {
   }
 });
 
-app.get("/get/user/:userid", async (req, res) => {
-  const userid = req.params["userid"];
+app.get("/get/user/:id", async (req, res) => {
+  const id = req.params["id"];
   try {
-    const users = await User.findAll({ where: { id: userid }, attributes: { exclude: ["password"] } });
+    const users = await User.findByPk(id, { attributes: { exclude: ["password"] } });
 
     res.send(JSON.stringify({ users }));
   } catch (error) {
@@ -276,6 +276,7 @@ app.get("/get/post/:privacy", async (req, res) => {
   try {
     const posts = await Post.findAll({
       where: { privacy: privacy },
+      include: { model: User, attributes: { exclude: ["password"] } },
     });
 
     res.send(JSON.stringify({ posts }));
