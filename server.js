@@ -142,12 +142,12 @@ app.get("/get/post/image/:id", async (req, res) => {
   }
 });
 
-app.get("/get/user/:id", async (req, res) => {
-  const id = req.params["id"];
+app.get("/get/user/:userid", async (req, res) => {
+  const userid = req.params["userid"];
   try {
-    const users = await User.findByPk(id, { attributes: { exclude: ["password"] } });
+    const users = await User.findAll({ where: { id: userid }, attributes: { exclude: ["password"] } });
 
-    res.send(JSON.stringify({users}));
+    res.send(JSON.stringify({ users }));
   } catch (error) {
     console.error("Erro ao buscar os usuários: " + error);
     res.sendStatus(500);
