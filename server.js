@@ -184,7 +184,7 @@ app.post("/auth/login", async (req, res) => {
 
     if (password === newUser.password) {
       const token = jwt.sign({ id: newUser.id }, "123");
-      res.status(201).json({ token: token });
+      res.status(201).json({ token: token, user: { username: newUser.username, tagname: newUser.tagname } });
     }
   } catch (error) {
     console.error("Erro ao logar: " + error);
