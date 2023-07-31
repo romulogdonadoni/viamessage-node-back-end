@@ -93,6 +93,7 @@ const Comment = sequelize.define(
     },
     comment: DataTypes.STRING,
     post_id: Sequelize.UUID,
+    user_id: Sequelize.UUID,
   },
   {
     freezeTableName: true,
@@ -108,10 +109,9 @@ Post.belongsTo(User, { foreignKey: "user_id" });
 Post.hasMany(Comment, {
   foreignKey: "post_id",
 });
-
-/* Comment.belongsTo(User, {
-  foreignKey: "owner_id",
-}); */
+Comment.belongsTo(User, {
+  foreignKey: "user_id",
+});
 
 function authToken(req, res, next) {
   const authHeader = req.headers["authorization"];
@@ -181,9 +181,10 @@ app.post("/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const newUser = await User.findOne({ where: { email: email } });
-
+    console.log(newUser)
+    console.log(newUser.dataValues.id)
     if (password === newUser.password) {
-      const token = jwt.sign({ id: newUser.id }, "123");
+      const token = jwt.sign({ id: newUser.dataValues.id }, "123");
       res.status(201).json({ token: token, user: { username: newUser.username, tagname: newUser.tagname } });
     }
   } catch (error) {
@@ -193,15 +194,18 @@ app.post("/auth/login", async (req, res) => {
 });
 
 app.post("/create/comment/:postid", authToken, async (req, res) => {
-  const { comment } = req.body;
-  const postid = req.params["postid"];
   const token = req.headers["authorization"].split(" ")[1];
   const { id } = jwt.decode(token);
+  const { comment } = req.body;
+  const postid = req.params["postid"];
+  console.log(jwt.decode(token))
+
   try {
     const newComment = await Comment.create({
       id: uuidv4(),
       comment,
       post_id: postid,
+      user_id: id,
     });
     res.status(201).json(newComment);
   } catch (error) {
@@ -217,10 +221,10 @@ app.get("/post/comment/:id", async (req, res) => {
   try {
     const comment = await Comment.findAll({
       where: { post_id: id },
-      /* include: {
+      include: {
         model: User,
         attributes: { exclude: ["password", "email"] },
-      }, */
+      },
     });
 
     res.send(JSON.stringify({ comment }));
