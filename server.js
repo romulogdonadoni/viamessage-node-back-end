@@ -61,8 +61,10 @@ const User = sequelize.define(
   },
 
   {
+    createdAt: true,
+    updatedAt: false,
     freezeTableName: true,
-    timestamps: false,
+    timestamps: true,
     tableName: "user",
   }
 );
@@ -79,8 +81,10 @@ const Post = sequelize.define(
     user_id: Sequelize.UUID,
   },
   {
+    createdAt: true,
+    updatedAt: false,
     freezeTableName: true,
-    timestamps: false,
+    timestamps: true,
     tableName: "posts",
   }
 );
