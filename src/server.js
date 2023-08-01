@@ -1,21 +1,10 @@
 const express = require("express");
 const sequelize = require("./config/sequelizeConfig");
-
-require("dotenv").config();
+const cors = require("cors");
 
 const PostModel = require("./models/postModel");
 const UserModel = require("./models/userModel");
 const CommentModel = require("./models/commentModel");
-
-const cors = require("cors");
-const app = express();
-app.use(express.json());
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  app.use(cors());
-  next();
-});
 
 const authLogin = require('./routes/authLogin');
 const authRegister = require('./routes/authRegister');
@@ -25,8 +14,18 @@ const showPost = require('./routes/showPost');
 const showComment = require('./routes/showComment');
 const showUser = require('./routes/showUser');
 
-app.use(authLogin, authRegister, creatPost, creatComment, showPost, showComment, showUser)
+require("dotenv").config();
 
+const app = express();
+app.use(express.json());
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  app.use(cors());
+  next();
+});
+
+app.use(authLogin, authRegister, creatPost, creatComment, showPost, showComment, showUser)
 
 sequelize.sync().then(() => {
   console.log("Modelo sincronizado com o banco de dados.");
