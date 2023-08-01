@@ -130,7 +130,7 @@ function authToken(req, res, next) {
   }
 }
 
-app.get("/get/post/image/:id", async (req, res) => {
+/* app.get("/get/post/image/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -142,7 +142,7 @@ app.get("/get/post/image/:id", async (req, res) => {
       res.send(err);
     };
   }
-});
+}); */
 
 app.get("/get/user/:id", async (req, res) => {
   const id = req.params["id"];
@@ -282,6 +282,7 @@ app.get("/get/post/:privacy", async (req, res) => {
   try {
     const posts = await Post.findAll({
       where: { privacy: privacy },
+      order: [["createdAt" , "DESC"]],
       include: { model: User, attributes: { exclude: ["password"] } },
     });
 
