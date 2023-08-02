@@ -13,8 +13,10 @@ const CommentModel = sequelize.define(
         user_id: Sequelize.UUID,
     },
     {
+        createdAt: true,
+        updatedAt: false,
         freezeTableName: true,
-        timestamps: false,
+        timestamps: true,
         tableName: "comments",
     }
 );

@@ -9,6 +9,7 @@ router.get("/post/comment/:id", async (req, res) => {
   try {
     const comment = await CommentModel.findAll({
       where: { post_id: id },
+      order: [["createdAt", "DESC"]],
       include: {
         model: UserModel,
         attributes: { exclude: ["password", "email"] },

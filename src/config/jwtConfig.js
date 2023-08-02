@@ -11,7 +11,7 @@ function authToken(req, res, next) {
         jwt.verify(token, "123");
         next();
     } catch (error) {
-        res.status(401).json({ msg: "Token inválido", token: token, tokena: "asd" });
+        res.status(401).json({ msg: "Token inválido" });
     }
 }
 module.exports = authToken
