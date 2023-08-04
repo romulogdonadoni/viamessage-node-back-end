@@ -18,7 +18,7 @@ router.get("/get/user/:tag", async (req, res) => {
     }
     );
 
-    res.send(JSON.stringify({ users }));
+    res.send(JSON.stringify([{ users }]));
   } catch (error) {
     console.error("Erro ao buscar os usuários: " + error);
     res.sendStatus(500);
