@@ -13,6 +13,8 @@ const creatComment = require('./routes/createComment');
 const showPost = require('./routes/showPost');
 const showComment = require('./routes/showComment');
 const showUser = require('./routes/showUser');
+const addFollow = require('./routes/addFollow');
+const FollowModel = require("./models/followModel");
 
 require("dotenv").config();
 
@@ -21,7 +23,7 @@ app.use(express.json());
 
 app.use(cors());
 
-app.use(authLogin, authRegister, creatPost, creatComment, showPost, showComment, showUser)
+app.use(authLogin, authRegister, creatPost, creatComment, showPost, showComment, showUser, addFollow)
 
 sequelize.sync().then(() => {
   console.log("Modelo sincronizado com o banco de dados.");
@@ -31,6 +33,7 @@ sequelize.sync().then(() => {
   });
 
 UserModel.hasMany(PostModel, { foreignKey: { name: "user_id" } })
+UserModel.hasMany(FollowModel, { foreignKey: { name: "user_id" } })
 
 PostModel.belongsTo(UserModel, { foreignKey: { name: "user_id" } });
 PostModel.hasMany(CommentModel, { foreignKey: { name: "post_id" } });
@@ -38,7 +41,7 @@ PostModel.hasMany(CommentModel, { foreignKey: { name: "post_id" } });
 CommentModel.belongsTo(UserModel, { foreignKey: "user_id" });
 CommentModel.belongsTo(PostModel, { foreignKey: "post_id" });
 
-module.exports = { UserModel, PostModel, CommentModel };
+module.exports = { UserModel, PostModel, CommentModel,  };
 app.listen(process.env.PORT, () => {
   console.log("Servidor Express iniciado na porta 3000.");
 });
