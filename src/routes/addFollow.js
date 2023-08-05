@@ -3,8 +3,9 @@ const FollowModel = require("../models/followModel");
 const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
+const authToken = require("../config/jwtConfig");
 
-router.post("/add/follow/:followtag", async (req, res) => {
+router.post("/add/follow/:followtag", authToken, async (req, res) => {
   const token = req.headers["authorization"].split(" ")[1];
   const { id: userid } = jwt.decode(token);
   const followtag = req.params["followtag"];
@@ -16,6 +17,23 @@ router.post("/add/follow/:followtag", async (req, res) => {
       user_id: userid,
     });
     res.send(JSON.stringify({ newFollow }));
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
+router.delete("/remove/follow/:followtag", authToken, async (req, res) => {
+  const token = req.headers["authorization"].split(" ")[1];
+  const { id: userid } = jwt.decode(token);
+  const followtag = req.params["followtag"];
+
+  try {
+    const newFollow = await FollowModel.destroy({ where: { user_id: userid, followedUser: followtag } });
+    if (newFollow) {
+      res.send(JSON.stringify({ liked: "following" }));
+    } else {
+      res.send(JSON.stringify({ liked: "follow" }));
+    }
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
