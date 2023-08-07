@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 function authToken(req, res, next) {
@@ -8,7 +9,7 @@ function authToken(req, res, next) {
     }
 
     try {
-        jwt.verify(token, "123");
+        jwt.verify(token, process.env.JWTSECRET);
         next();
     } catch (error) {
         res.status(401).json({ msg: "Token inválido" });
