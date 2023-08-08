@@ -1,7 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const UserModel = require("../models/userModel");
-const FollowModel = require('../models/followModel');
+const FollowModel = require("../models/followModel");
+const PostModel = require("../models/postModel");
 
 router.get("/get/user/:tag", async (req, res) => {
   const tag = req.params["tag"];
@@ -9,14 +10,16 @@ router.get("/get/user/:tag", async (req, res) => {
     const users = await UserModel.findOne({
       where: { tagname: tag },
       attributes: { exclude: ["password"] },
-      include: {
-        model: FollowModel,
-        attributes: {
-          exclude: ["id", "user_id"]
-        }
-      }
-    }
-    );
+      include: [
+        {
+          model: FollowModel,
+          attributes: {
+            exclude: ["id", "user_id"],
+          },
+        },
+        { model: PostModel },
+      ],
+    });
 
     res.json({ users: [users] });
   } catch (error) {
@@ -35,5 +38,4 @@ router.get("/get/user", async (req, res) => {
   }
 });
 
-
-module.exports = router
+module.exports = router;

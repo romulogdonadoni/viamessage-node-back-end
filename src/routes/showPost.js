@@ -1,8 +1,8 @@
+const authToken = require("../config/jwtConfig");
 const PostModel = require("../models/postModel");
 const UserModel = require("../models/userModel");
 const router = require("./authLogin");
 const jwt = require("jsonwebtoken");
-
 
 router.get("/get/post/:privacy", async (req, res) => {
   const token = req.headers["authorization"].split(" ")[1];
@@ -22,4 +22,4 @@ router.get("/get/post/:privacy", async (req, res) => {
     res.sendStatus(500);
   }
 });
-module.exports = router
+module.exports = router;
