@@ -17,7 +17,7 @@ router.post("/create/post", multer(multerConfig).single("image"), authToken, asy
     metaData = await imagekit
       .upload({
         file: base64image,
-        fileName: "my_file_name.jpg",
+        fileName: "my_file_name",
       })
       .then((response) => {
         console.log(response);

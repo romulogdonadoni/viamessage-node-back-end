@@ -8,6 +8,7 @@ const UserModel = sequelize.define(
             type: Sequelize.UUID,
             primaryKey: true,
         },
+        img_profile: DataTypes.STRING,
         tagname: DataTypes.STRING,
         username: DataTypes.STRING,
         email: DataTypes.STRING,
