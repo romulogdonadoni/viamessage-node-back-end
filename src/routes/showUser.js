@@ -17,7 +17,7 @@ router.get("/get/user/:tag", async (req, res) => {
             exclude: ["id", "user_id"],
           },
         },
-        { model: PostModel },
+        { model: PostModel, order: [["createdAt", "DESC"]] },
       ],
     });
 
