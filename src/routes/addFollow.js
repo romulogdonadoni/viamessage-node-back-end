@@ -28,12 +28,7 @@ router.delete("/remove/follow/:followtag", authToken, async (req, res) => {
   const followtag = req.params["followtag"];
 
   try {
-    const newFollow = await FollowModel.destroy({ where: { user_id: userid, followedUser: followtag } });
-    if (newFollow) {
-      res.send(JSON.stringify({ liked: "following" }));
-    } else {
-      res.send(JSON.stringify({ liked: "follow" }));
-    }
+    await FollowModel.destroy({ where: { user_id: userid, followedUser: followtag } });
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
