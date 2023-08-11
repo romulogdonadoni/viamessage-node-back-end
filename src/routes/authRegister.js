@@ -17,6 +17,14 @@ router.post("/auth/register", multer(multerConfig).single("img_profile"), async 
         file: base64image,
         fileName: "profile_img",
         folder: "ProfileImages",
+        transformation: [
+          {
+            width: 256,
+            height: 256,
+            crop: "force",
+            quality: 90
+          }
+        ]
       })
       .then((response) => {
         console.log(response);
