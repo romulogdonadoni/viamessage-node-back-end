@@ -5,7 +5,8 @@ const jwt = require("jsonwebtoken");
 
 router.delete("/remove/post/:id", authToken, async (req, res) => {
   const token = req.headers["authorization"].split(" ")[1];
-  const { user_id } = jwt.decode(token);
+  const { id: user_id } = jwt.decode(token);
+  console.log(user_id);
   const id = req.params["id"];
   try {
     await PostModel.destroy({
