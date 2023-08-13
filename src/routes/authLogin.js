@@ -12,7 +12,14 @@ router.post("/auth/login", async (req, res) => {
     console.log(newUser);
     if (password === newUser.password) {
       const token = jwt.sign({ id: newUser.dataValues.id, tagname: newUser.dataValues.tagname }, process.env.JWTSECRET);
-      res.status(201).json({ token: token, user: { username: newUser.username, tagname: newUser.tagname } });
+      res.status(201).json({
+        token: token,
+        user: {
+          username: newUser.username,
+          tagname: newUser.tagname,
+          img_profile: newUser.img_profile,
+        },
+      });
     } else {
       res.status(401).json({ msg: "senha incorreta" });
     }
